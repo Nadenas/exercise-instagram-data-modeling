@@ -8,7 +8,7 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-  
+
 class Followers(Base):
     __tablename__ = 'followers'
     # Here we define columns for the table address.

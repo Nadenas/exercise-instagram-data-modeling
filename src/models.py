@@ -9,8 +9,8 @@ from eralchemy import render_er
 Base = declarative_base()
 
 
-class Followers(Base):
-    __tablename__ = 'followers'
+class Follower(Base):
+    __tablename__ = 'follower'
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
@@ -18,12 +18,14 @@ class Followers(Base):
     user_from = Column(Integer)
 
 
-class Likes(Base):
-    __tablename__ = 'likes'
+class Like(Base):
+    __tablename__ = 'like'
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    like = Column(Integer)
+    post_id = Column(Integer, ForeignKey('post.id'))
+    profile_id = Column(Integer, ForeignKey('profile.id'))
+
        
 
 class Media(Base):
@@ -34,8 +36,6 @@ class Media(Base):
     type = Column(String(250), nullable=False)
     url = Column(String(250))
     tag = Column(String(250))
-    likes_id = Column(Integer, ForeignKey('likes.id'))
-    likes = relationship(Likes)
 
 class Post(Base):
     __tablename__ = 'post'
@@ -44,7 +44,8 @@ class Post(Base):
     id = Column(Integer, primary_key=True)
     text = Column(String(250), nullable=False)
     media_id = Column(Integer, ForeignKey('media.id'))
-    media = relationship(Media) 
+    media = relationship(Media)
+    like = relationship(Like) 
       
 
 class Profile(Base):
@@ -58,10 +59,11 @@ class Profile(Base):
     bio = Column(String(250))
     post_id = Column(Integer, ForeignKey('post.id'))
     post = relationship(Post)
-    user_to_id = Column(Integer, ForeignKey('followers.id'))
-    followers = relationship(Followers)
-    user_from_id = Column(Integer, ForeignKey('followers.id'))
-    followers= relationship(Followers)
+    user_to_id = Column(Integer, ForeignKey('follower.id'))
+    follower = relationship(Follower)
+    user_from_id = Column(Integer, ForeignKey('follower.id'))
+    follower= relationship(Follower)
+    like = relationship(Like)
 
 
     def to_dict(self):
